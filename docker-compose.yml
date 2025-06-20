@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # Main Laravel App
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: laravel-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+
+  # Primary MySQL for main app
+  mysql:
+    image: mysql:8
+    container_name: laravel-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  # Redis for queues
+  redis:
+    image: redis:alpine
+    container_name: laravel-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  # phpMyAdmin connecting to both MySQL services
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: laravel-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+      - sync-db
+    environment:
+      PMA_HOSTS: "mysql,sync-db"
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+
+  # Laravel-based Sync Microservice
+  sync-app:
+    build:
+      context: ./src-user-sync
+      dockerfile: Dockerfile
+    image: sync-app
+    container_name: sync-app
+    restart: unless-stopped
+    ports:
+      - "9001:9000"
+    volumes:
+      - ./src-user-sync:/var/www/html
+    depends_on:
+      - sync-db
+
+  # MySQL for Sync Microservice
+  sync-db:
+    image: mysql:8
+    container_name: sync-db
+    restart: always
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sync-service
+      MYSQL_USER: laravel-sync
+      MYSQL_PASSWORD: laravel-sync
+    volumes:
+      - sync-db-data:/var/lib/mysql
+
+volumes:
+  dbdata:
+  sync-db-data:

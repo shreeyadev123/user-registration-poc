@@ -1,0 +1,35 @@
+# Root-level Laravel dependencies
+/vendor
+/node_modules
+
+# Laravel default test stubs (optional to ignore)
+tests/**/ExampleTest.php
+
+# Per-service Node & Vendor dependencies
+/src-user-sync/vendor/
+/src-user-sync/node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDEs and editors
+.idea/
+.DS_Store
+
+# Laravel logs, cache, and compiled files
+/src-user-sync/storage/*.key
+/src-user-sync/storage/debugbar/
+/src-user-sync/storage/framework/**
+/src-user-sync/storage/logs/
+/src-user-sync/public/storage/
+
+/src-user-sync/bootstrap/cache/*.php
+
+# PHPUnit cache
+/src-user-sync/.phpunit.result.cache
+
+# Composer & NPM logs (optional)
+/src-user-sync/composer.lock
+/src-user-sync/package-lock.json

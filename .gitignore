@@ -1,0 +1,37 @@
+# Node & Vendor dependencies
+/src/vendor/
+/src/node_modules/
+src-user-sync/vendor/
+src-user-sync/node_modules/
+
+# Environment files
+/src/.env
+src-user-sync/.env
+.env
+.env.*.backup
+
+# IDEs and editors
+.idea
+.DS_Store
+
+# Laravel logs and cache - Main app
+/src/storage/*.key
+/src/storage/debugbar/
+/src/storage/framework/
+src/storage/logs/
+src/public/storage/
+
+# Laravel logs and cache - User Sync app
+/src-user-sync/storage/*.key
+/src-user-sync/storage/debugbar/
+src-user-sync/storage/framework/
+src-user-sync/storage/logs/
+src-user-sync/public/storage/
+
+# PHPUnit cache
+/src/.phpunit.result.cache
+/src-user-sync/.phpunit.result.cache
+
+# Composer & NPM logs
+composer.lock
+package-lock.json
